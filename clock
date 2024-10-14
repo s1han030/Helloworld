@@ -1,0 +1,63 @@
+let radius = 250;  // 圆的半径
+let totalPoints = 60;  // 圆上的点数
+
+function setup() {
+  createCanvas(800, 800); // 创建800x800的画布
+}
+
+function draw() {
+  background(0); // 设置背景为黑色
+  translate(width / 2, height / 2); // 将原点移到画布中心
+
+  // 绘制60个点的圆
+  for (let i = 0; i < totalPoints; i++) {
+    let angle = map(i, 0, totalPoints, 0, TWO_PI); // 计算每个点的角度
+    let x = radius * cos(angle); // 计算x坐标
+    let y = radius * sin(angle); // 计算y坐标
+
+    fill(255); // 白色
+    noStroke(); // 不绘制边框
+    ellipse(x, y, 3, 3); // 绘制点
+  }
+  
+  // 获取当前的小时
+  let h = hour() % 12; // 获取当前小时（0-11）
+  if (h === 0) h = 12; // 将0转为12以符合时钟格式
+  let hourAngle = map(h, 0, 12, -PI / 2, (3 * PI) / 2); // 将小时映射到适当的角度
+
+  // 计算红色时针的坐标
+  let hourX = radius * cos(hourAngle); // 时针的x坐标
+  let hourY = radius * sin(hourAngle); // 时针的y坐标
+  
+  // 绘制红色的40x40的时针圆
+  fill(255, 0, 0); // 将填充颜色设置为红色
+  noStroke(); // 不绘制边框
+  ellipse(hourX, hourY, 40, 40); // 绘制时针圆
+
+  // 获取当前的分钟
+  let m = minute(); // 当前分钟（0-59）
+  let minAngle = map(m, 0, 60, -PI / 2, (3 * PI) / 2); // 将分钟映射到适当的角度
+
+
+  // 计算黄色小圆的坐标（分针）
+  let minX = radius * cos(minAngle); // 分针的x坐标（偏移量为50）
+  let minY = radius * sin(minAngle); // 分针的y坐标（偏移量为50）
+
+  // 绘制30x30的黄色圆作为分针
+  fill(255, 204, 0); // 设置填充颜色为黄色
+  noStroke(); // 不绘制边框
+  ellipse(minX, minY, 30, 30); // 绘制分针
+  
+  // 获取当前的秒数
+  let s = second();
+  let secAngle = map(s, 0, 60, 0, TWO_PI); // 将秒数映射到0到2PI的范围
+
+  // 计算蓝色小圆的坐标（秒针）
+  let secX = radius * cos(secAngle); // 小圆的x坐标
+  let secY = radius * sin(secAngle); // 小圆的y坐标
+
+  // 绘制蓝色的20x20的圆作为秒针
+  fill(0, 0, 255); // 将填充颜色设置为蓝色
+  noStroke(); // 不绘制边框
+  ellipse(secX, secY, 20, 20); // 绘制小圆
+}
