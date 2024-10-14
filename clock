@@ -1,26 +1,26 @@
-let radius = 250;  // Radius of the circle
-let totalPoints = 60;  // Number of points on the circle
+  let radius = 250; 
+  let totalPoints = 60; 
 
-function setup() {
-  createCanvas(800, 800); // Create an 800x800 canvas
-}
+  function setup() {
+  createCanvas(800, 800);
+  }
 
-function draw() {
-  background(0); // Set the background to black
+  function draw() {
+  background(0); 
   translate(width / 2, height / 2); // Move the origin to the center of the canvas
 
   // Draw a circle with 60 points
   for (let i = 0; i < totalPoints; i++) {
-    let angle = map(i, 0, totalPoints, 0, TWO_PI); // Calculate the angle of each point
-    let x = radius * cos(angle); // Calculate x coordinate
-    let y = radius * sin(angle); // Calculate y coordinate
+  let angle = map(i, 0, totalPoints, 0, TWO_PI); // Calculate the angle of each point
+  let x = radius * cos(angle); // Calculate x coordinate
+  let y = radius * sin(angle); // Calculate y coordinate
 
-    fill(255); // White
-    noStroke(); // No border
-    ellipse(x, y, 3, 3); // Draw point
+  fill(255);
+  noStroke(); 
+  ellipse(x, y, 3, 3); 
   }
   
-  // Get the current hour
+  // current hour
   let h = hour() % 12; // Get the current hour (0-11)
   if (h === 0) h = 12; // Convert 0 to 12 to match clock format
   let hourAngle = map(h, 0, 12, -PI / 2, (3 * PI) / 2); // Map hour to the appropriate angle
@@ -29,12 +29,12 @@ function draw() {
   let hourX = radius * cos(hourAngle); // Hour hand's x coordinate
   let hourY = radius * sin(hourAngle); // Hour hand's y coordinate
   
-  // Draw a red 40x40 hour hand circle
-  fill(255, 0, 0); // Set the fill color to red
-  noStroke(); // No border
-  ellipse(hourX, hourY, 40, 40); // Draw hour hand circle
+  // hour shape 
+  fill(255, 0, 0); 
+  noStroke(); 
+  ellipse(hourX, hourY, 40, 40);
 
-  // Get the current minute
+  // current minute
   let m = minute(); // Current minute (0-59)
   let minAngle = map(m, 0, 60, -PI / 2, (3 * PI) / 2); // Map minute to the appropriate angle
 
@@ -42,12 +42,12 @@ function draw() {
   let minX = radius * cos(minAngle); // Minute hand's x coordinate
   let minY = radius * sin(minAngle); // Minute hand's y coordinate
 
-  // Draw a 30x30 yellow circle as the minute hand
-  fill(255, 204, 0); // Set the fill color to yellow
-  noStroke(); // No border
-  ellipse(minX, minY, 30, 30); // Draw minute hand
+  // minute shape
+  fill(255, 204, 0); 
+  noStroke(); 
+  ellipse(minX, minY, 30, 30); 
   
-  // Get the current seconds
+  // current seconds
   let s = second();
   let secAngle = map(s, 0, 60, 0, TWO_PI); // Map seconds to the range of 0 to 2PI
 
@@ -55,8 +55,10 @@ function draw() {
   let secX = radius * cos(secAngle); // Small circle's x coordinate
   let secY = radius * sin(secAngle); // Small circle's y coordinate
 
-  // Draw a blue 20x20 circle as the second hand
-  fill(0, 0, 255); // Set the fill color to blue
-  noStroke(); // No border
-  ellipse(secX, secY, 20, 20); // Draw small circle
+  // second shape
+  fill(0, 0, 255); 
+  noStroke(); 
+  ellipse(secX, secY, 20, 20); 
 }
+
+
