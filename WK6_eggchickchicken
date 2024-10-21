@@ -1,0 +1,102 @@
+let emojis = ['☀️', '💧', '🌽', '🐛', '🌾']; // 可掉落的 emoji
+let egg, chick, chicken; // 角色图像
+let fallingItems = []; // 掉落的物品
+let eggCount = 0;
+let chickCount = { water: 0, corn: 0, bug: 0, grass: 0 };
+let gameState = "egg"; // 当前游戏阶段
+
+function setup() {
+    createCanvas(800, 600);
+    egg = createDiv('🥚'); // 创建鸡蛋
+    egg.style('font-size', '50px');
+    egg.position(mouseX, mouseY);
+
+    // 设置定时器生成掉落物品
+    setInterval(() => {
+        for (let i = 0; i < 3; i++) { // 每秒生成3个emoji
+            fallingItems.push({ emoji: random(emojis), x: random(width), y: 0 });
+        }
+    }, 1000);
+}
+
+function draw() {
+    background(255, 225, 156); // 设置背景颜色
+
+    // 更新鸡蛋/小鸡/鸡的位置
+    if (gameState === "egg") {
+        egg.position(mouseX, mouseY);
+    } else if (gameState === "chick") {
+        chick.position(mouseX, mouseY);
+    } else if (gameState === "chicken") {
+        chicken.position(mouseX, mouseY);
+    }
+
+    // 绘制掉落物品
+    for (let i = fallingItems.length - 1; i >= 0; i--) {
+        let item = fallingItems[i];
+        textSize(30);
+        text(item.emoji, item.x, item.y);
+        item.y += 5; // 物品掉落
+
+        // 检测碰撞
+        if (dist(item.x, item.y, mouseX, mouseY) < 25) {
+            handleCatch(item.emoji); // 处理捕获到的物品
+            fallingItems.splice(i, 1); // 移除已捕获的物品
+        }
+
+        // 超出画面，移除物品
+        if (item.y > height) {
+            fallingItems.splice(i, 1);
+        }
+    }
+}
+
+function handleCatch(caught) {
+    if (gameState === "egg" && caught === '☀️') {
+        eggCount++;
+        if (eggCount >= 3) { // 捕获3个☀️
+            egg.remove();
+            startChick(); // 变为小鸡
+        }
+    } else if (gameState === "chick") {
+        if (caught === '💧') {
+            chickCount.water++;
+        } else if (caught === '🌽') {
+            chickCount.corn++;
+        } else if (caught === '🐛') {
+            chickCount.bug++;
+        } else if (caught === '🌾') {
+            chickCount.grass++;
+        }
+
+        // 检查小鸡的状态
+        if (chickCount.water >= 5
+            && (chickCount.corn > 0 && chickCount.bug > 0 && chickCount.grass > 0)) {
+            chick.remove();
+            startChicken(); // 变为鸡
+        }
+    }
+}
+
+function startChick() {
+    gameState = "chick"; // 进入第二阶段
+    chick = createDiv('🐤'); // 创建小鸡
+    chick.style('font-size', '50px');
+    chick.position(mouseX, mouseY);
+}
+
+function startChicken() {
+    gameState = "chicken"; // 进入第三阶段
+    chicken = createDiv('🐔'); // 创建鸡
+    chicken.style('font-size', '50px');
+    chicken.position(mouseX, mouseY);
+}
+
+// 更新小鸡/鸡的位置
+function mouseMoved() {
+    if (gameState === "chick") {
+        chick.position(mouseX, mouseY);
+    } else if (gameState === "chicken") {
+        chicken.position(mouseX, mouseY);
+    }
+}
