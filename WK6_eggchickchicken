@@ -4,6 +4,7 @@ let fallingItems = []; // Falling items
 let eggCount = 0; 
 let chickCount = { water: 0, corn: 0, bug: 0, grass: 0 }; // Chick item counts
 let gameState = "egg"; // Current game stage
+let gameOver = false; // Game over status
 
 function setup() {
     createCanvas(800, 600); // Create the canvas
@@ -31,7 +32,7 @@ function draw() {
         chicken.position(mouseX, mouseY);
     }
 
-    // Falling items
+    // Draw falling items
     for (let i = fallingItems.length - 1; i >= 0; i--) {
         let item = fallingItems[i];
         textSize(30);
@@ -49,12 +50,24 @@ function draw() {
             fallingItems.splice(i, 1);
         }
     }
+
+    // Display counts in the upper left corner
+    fill(0); // Set text color to black
+    textSize(24);
+    if (gameState === "egg") {
+        text(`☀️: ${eggCount}/5`, 20, 30); // Display count of ☀️
+    } else if (gameState === "chick") {
+        text(`💧: ${chickCount.water}/5`, 20, 30); 
+        text(`🌽: ${chickCount.corn}/2`, 20, 60);
+        text(`🐛: ${chickCount.bug}/2`, 20, 90);
+        text(`🌾: ${chickCount.grass}/2`, 20, 120); 
+    }
 }
 
 function handleCatch(caught) {
     if (gameState === "egg" && caught === '☀️') {
         eggCount++;
-        if (eggCount >= 5) {
+        if (eggCount >= 5) { 
             egg.remove();
             startChick(); // Transform to chick
         }
@@ -71,7 +84,7 @@ function handleCatch(caught) {
 
         // Check chick status
         if (chickCount.water >= 5
-            && (chickCount.corn > 0 && chickCount.bug > 0 && chickCount.grass > 0)) {
+            && (chickCount.corn >= 2  && chickCount.bug >= 2 && chickCount.grass >= 2)) {
             chick.remove();
             startChicken(); // Transform to chicken
         }
@@ -87,16 +100,6 @@ function startChick() {
 
 function startChicken() {
     gameState = "chicken"; // Enter the third stage
-    chicken = createDiv('🐔'); // Create chicken
+    chicken = createDiv('🐔');
     chicken.style('font-size', '50px');
-    chicken.position(mouseX, mouseY);
-}
-
-// Update chick/chicken position
-function mouseMoved() {
-    if (gameState === "chick") {
-        chick.position(mouseX, mouseY);
-    } else if (gameState === "chicken") {
-        chicken.position(mouseX, mouseY);
-    }
 }
